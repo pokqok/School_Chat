@@ -1,0 +1,232 @@
+#firstArea {
+  width: 100%;
+  height: 100%;
+  background-color: #1c1c1c;
+  order: 3;
+}
+
+#profileArea {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 15vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#profileButtons {
+  width: 50%;
+  height: 15vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#profileButtons div {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background: red;
+  cursor: pointer;
+}
+
+#profileButtons div:first-child {
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  background-color: aliceblue;
+}
+
+#settingButton {
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 55px;
+}
+
+#leftArea {
+  position: absolute;
+  bottom: 0;
+  width: 10%;
+  height: 85%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#divLine {
+  width: 90%;
+  height: 2px;
+  background: gray;
+  margin-top: 5%;
+}
+
+#leftOptions {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  cursor: pointer;
+  margin-top: 5%;
+}
+
+#groups {
+  width: 10vh;
+  height: 10vh;
+  border-radius: 10px;
+  background-color: #323232;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 5%;
+}
+
+#userSection {
+  position: absolute;
+  bottom: 0;
+  width: 40vh;
+  height: 10vh;
+  background-color: #1c1c1c;
+  order: -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#userInfo {
+  display: flex;
+  width: 40vh;
+  justify-content: center;
+}
+
+#userProfile {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: red;
+  margin-right: 3%;
+}
+
+#userName {
+  color: white;
+}
+
+#userIcons {
+  display: flex;
+  width: 40vh;
+  justify-content: space-around;
+  margin-top: 1%;
+}
+
+#icon {
+  cursor: pointer;
+}
+
+#secondArea {
+  width: 90%;
+  height: 85%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background-color: #343434;
+  order: 2;
+}
+
+#secondTop {
+  width: 100%;
+  height: 6vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#groupName {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 1%;
+}
+
+#quitButton {
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+#secondLeft {
+  position: absolute;
+  bottom: 0;
+  width: 10%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#secondOptionSection {
+  width: 100%;
+  height: 3vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 8%;
+}
+
+#secondSelection {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+#plusIcon {
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#message {
+  position: absolute;
+  right: 0;
+  bottom: 5%;
+  background-color: #414141;
+  color: white;
+  width: 80%;
+  height: 70vh;
+  overflow-y: auto;
+  word-wrap: break-word;
+}
+
+#chatInput {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 80%;
+  height: 5vh;
+  background-color: #646464;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#txtChat {
+  margin-left: 3%;
+  width: 80%;
+  padding: 3px;
+  background-color: #646464;
+  color: white;
+  border: none;
+}
+
+#txtChat::placeholder {
+  color: white;
+  font-weight: bold;
+}

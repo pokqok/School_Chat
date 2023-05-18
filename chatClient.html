@@ -1,0 +1,75 @@
+<script src="chatClient.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<link rel="stylesheet" href="./reset.css" />
+<link rel="stylesheet" href="./chatClient.css" />
+
+<!--가장 바깥쪽 영역-->
+<div id="firstArea">
+  <!--가장 바깥쪽 상단 영역-->
+  <div id="profileArea">
+    <div id="profileButtons">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div id="settingButton">⚙️</div>
+  </div>
+  <!--가장 바깥쪽 좌측 영역-->
+  <div id="leftArea">
+    <div id="divLine"></div>
+    <div id="leftOptions">🧑‍🤝‍🧑</div>
+    <div id="leftOptions">🔍</div>
+    <div id="divLine"></div>
+    <div id="groups">Group1</div>
+    <div id="groups">Group2</div>
+    <div id="groups">Group3</div>
+  </div>
+</div>
+
+<!--두번째 바깥쪽 영역-->
+<div id="secondArea">
+  <!--두번째 바깥쪽 상단 영역-->
+  <div id="secondTop">
+    <div id="groupName">Group1</div>
+    <div id="quitButton">🚪</div>
+  </div>
+  <!--두번째 바깥쪽 좌측 영역-->
+  <div id="secondLeft">
+    <div id="divLine"></div>
+    <div id="secondOptionSection">
+      <div id="secondSelection">Chat</div>
+      <div id="plusIcon">+</div>
+    </div>
+    <div id="divLine"></div>
+    <div id="secondOptionSection">
+      <div id="secondSelection">Channel</div>
+      <div id="plusIcon">+</div>
+    </div>
+  </div>
+</div>
+
+<!--유저 정보 영역(왼쪽 아래)-->
+<div id="userSection">
+  <div id="userInfo">
+    <div id="userProfile"></div>
+    <div id="userName">User</div>
+  </div>
+  <div id="userIcons">
+    <div id="icon">🎤</div>
+    <div id="icon">🎧</div>
+    <div id="icon">⚙️</div>
+  </div>
+</div>
+
+<!--채팅 출력 영역-->
+<div id="message"></div>
+<div id="chatInput">
+  <input
+    type="text"
+    id="txtChat"
+    name="txtChat"
+    placeholder="메세지를 입력하세요..."
+  />
+</div>
