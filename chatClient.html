@@ -2,6 +2,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <link rel="stylesheet" href="./reset.css" />
 <link rel="stylesheet" href="./chatClient.css" />
+<meta charset="UTF-8" />
 
 <!--가장 바깥쪽 영역-->
 <div id="firstArea">
@@ -14,17 +15,21 @@
       <div></div>
       <div></div>
     </div>
-    <div id="settingButton">⚙️</div>
+    <div id="profileRightArea">
+      <button id="shareButton" onclick="sharePage()">공유</button>
+      <div id="settingButton">⚙️</div>
+    </div>
   </div>
   <!--가장 바깥쪽 좌측 영역-->
   <div id="leftArea">
     <div id="divLine"></div>
-    <div id="leftOptions">🧑‍🤝‍🧑</div>
-    <div id="leftOptions">🔍</div>
+    <div id="leftOptions">🏚️Small Rooms</div>
+    <div id="leftOptions">🏚️Big Rooms</div>
     <div id="divLine"></div>
     <div id="groups">Group1</div>
     <div id="groups">Group2</div>
     <div id="groups">Group3</div>
+    <a id="home" href="http://127.0.0.1:3000/">홈으로</a>
   </div>
 </div>
 
@@ -32,35 +37,27 @@
 <div id="secondArea">
   <!--두번째 바깥쪽 상단 영역-->
   <div id="secondTop">
-    <div id="groupName">Group1</div>
+    <div id="groupName"></div>
     <div id="quitButton">🚪</div>
   </div>
   <!--두번째 바깥쪽 좌측 영역-->
   <div id="secondLeft">
-    <div id="divLine"></div>
-    <div id="secondOptionSection">
-      <div id="secondSelection">Chat</div>
-      <div id="plusIcon">+</div>
-    </div>
-    <div id="divLine"></div>
-    <div id="secondOptionSection">
-      <div id="secondSelection">Channel</div>
-      <div id="plusIcon">+</div>
-    </div>
+    <div id="roomOptions"></div>
   </div>
 </div>
 
 <!--유저 정보 영역(왼쪽 아래)-->
-<div id="userSection">
-  <div id="userInfo">
-    <div id="userProfile"></div>
-    <div id="userName">User</div>
-  </div>
-  <div id="userIcons">
-    <div id="icon">🎤</div>
-    <div id="icon">🎧</div>
-    <div id="icon">⚙️</div>
-  </div>
+<div id="roomInsert">
+  <form id="roomInsertForm">
+    <input
+      id="roomInput"
+      type="text"
+      name="room_name"
+      placeholder="최대 5글자 입력"
+      minlength="1"
+    />
+    <input id="roomSubmit" type="submit" />
+  </form>
 </div>
 
 <!--채팅 출력 영역-->
