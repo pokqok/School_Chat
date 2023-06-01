@@ -42,10 +42,20 @@ socket.sockets.on("connection", function (client) {
 
   //서버 receive 이벤트 함수(클라이언트에서 호출 할 이벤트)
   client.on("serverReceiver", function (value) {
-    //클라이언트 이베트 호출
+    //클라이언트 이벤트 호출
     socket.sockets.emit("clientReceiver", {
       clientID: clientID,
       message: value,
     });
+  });
+  client.on("createRoom", function (roomName) {
+    // Generate a unique room ID
+    var roomID = uniqueID();
+    // Create a new room object
+    var room = {
+      id: roomID,
+      name: roomName,
+      participants: [clientID], // Add the creator to the participants list
+    };
   });
 });
