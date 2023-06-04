@@ -17,6 +17,8 @@ app.use(function (req, res) {
   console.log("use:", fileName);
 });
 
+var rooms = {};
+
 //http 서버 생성
 var server = require("http").createServer(app);
 server.listen(3000);
