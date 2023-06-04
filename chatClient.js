@@ -170,73 +170,153 @@ window.onload = function () {
   });
 };
 
-//-------------------------------------------
-//클릭해서 사진 파일 추가하기
-function triggerFileInput() {
-  const fileInput = document.getElementById('fileInput');
-  fileInput.click();
-}
 
-//프로필 사진 변경하기
-function changeProfileImage() {
-  const fileInput = document.getElementById('fileInput');
-  const profileImage = document.getElementById('profileImage');
+socket.on('createRoom', function (roomName) {
+  console.log("create");
+  var roomID = uniqueID();
+  var room = {
+    id: roomID,
+    name: roomName,
+    participants: [clientID],
+  };
+  rooms[roomID] = room; // 방 객체 저장
+  socket.emit('roomCreated', room); // 클라이언트에게 방 생성 완료 메시지 전송
+  socket.join(roomID); // 클라이언트를 방에 추가
+});
 
-  if (fileInput.files && fileInput.files[0]) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      profileImage.src = e.target.result;
-    }
-    reader.readAsDataURL(fileInput.files[0]);
-  }
-}
-
-//프로필 닉네임
-function changeProfileName() {
-  const nameInput = document.getElementById('nameInput');
-  const profileName = document.getElementById('profileName');
-  const saveProfileButton = document.getElementById('saveProfile');
-
-  if (nameInput.value) {
-    profileName.textContent = nameInput.value;
-    saveProfileButton.disabled = false;
+// 초대 요청 받기
+socket.on('inviteToRoom', function (roomId) {
+  var room = rooms[roomId];
+  if (room) {
+    room.participants.push(clientID); // 클라이언트를 방에 추가
+    socket.emit('roomJoined', room); // 클라이언트에게 방 참여 완료 메시지 전송
+    socket.join(roomId);
   } else {
-    profileName.textContent = '닉네임';
-    saveProfileButton.disabled = true;
+    socket.emit('roomJoinError', '방이 존재하지 않습니다.'); // 에러 메시지 전송
   }
+});
+
+// 클라이언트 로그인 이벤트 처리
+socket.on('login', function (userData) {
+  //var userID = db.getUserId(userData.username); // 유저를 식별하기 위한 고유한 식별자 생성
+  var username = userData.username;
+
+  // TODO: ID와 패스워드 검증 로직 구현
+
+  console.log('User logged in:', clientID, username);
+
+  var users = {};
+
+  // 유저 정보 저장
+  users[clientID] = {
+    userID: clientID,
+    username: username,
+  };
+
+  // 클라이언트에게 유저 식별자 전송
+  socket.emit('userID', clientID);
+});
+
+function leaveRoom(roomId) {
+  socket.emit('leaveRoom', roomId);
 }
 
-//프로필 폼 닫기
-function toggleModal(id) {
-  document.getElementById(id).classList.toggle('on');
+document.getElementById('quitButton').addEventListener('click', function() {
+  var roomId = "방의 고유 ID"; // 탈퇴할 방의 고유 ID를 여기에 입력
+  leaveRoom(roomId);
+});
+
+function deleteRoom(roomId) {
+  // 서버로 deleteroom 이벤트 전송
+  socket.emit('deleteroom', roomId);
 }
 
-// 프로필 저장 처리
-function saveProfile() {
-  const nameInput = document.getElementById('nameInput').value;
-  const passwordInput = document.getElementById('passwordInput').value;
-  
-  console.log('프로필 저장:', nameInput, passwordInput);
-  
-  // 프로필 폼 닫기
-  toggleModal();
+
+// inviteToNewRoom 이벤트 핸들러 (방합치기)
+socket.on('inviteToNewRoom', function (data) {
+var { invitedUsers } = data;
+
+// 새로운 방 생성
+var newRoomId = uniqueID();
+var newRoom = {
+  id: newRoomId,
+  name: 'New Room',
+  participants: [clientID, ...invitedUsers],
+};
+rooms[newRoomId] = newRoom;
+
+// 클라이언트에게 방 생성 완료 메시지 전송
+socket.emit('newRoomCreated', newRoom);
+
+// 초대한 사용자들을 새로운 방에 추가
+invitedUsers.forEach(function (userId) {
+  socket.sockets.to(userId).emit('joinNewRoom', newRoomId);
+  socket.to(userId).join(newRoomId);
+});
+});
+
+// inviteAllInRoom 이벤트 핸들러
+socket.on('inviteAllInRoom', function (data) {
+var { roomId, invitedBy } = data;
+
+// 초대하려는 방의 참가자들 가져오기
+var room = rooms[roomId];
+if (!room) {
+  // 방이 존재하지 않을 경우 처리
+  socket.emit('inviteAllInRoomError', '초대하려는 방이 존재하지 않습니다.');
+  return;
 }
 
-//비밀번호 확인 검사
-function checkPassword() {
-  const passwordInput = document.getElementById('passwordInput');
-  const confirmPasswordInput = document.getElementById('confirmPasswordInput');
-  const passwordWarning = document.getElementById('passwordWarning');
-  const saveProfileButton = document.getElementById('saveProfile');
+var participants = room.participants;
 
-  if (passwordInput.value !== confirmPasswordInput.value) {
-    passwordWarning.textContent = '비밀번호가 일치하지 않습니다.';
-    saveProfileButton.disabled = true;
-  } else {
-    passwordWarning.textContent = '';
-    saveProfileButton.disabled = false;
+// 참가자들을 순회하면서 초대 메시지 전송
+participants.forEach(function (participantId) {
+  // 자기 자신에게는 초대 메시지를 보내지 않도록 함
+  if (participantId !== clientID) {
+    socket.sockets.to(participantId).emit('invitation', {
+      invitedBy: invitedBy,
+      roomId: roomId,
+    });
   }
+});
+
+// 성공적으로 초대 메시지를 전송한 경우 응답 전송
+socket.emit('inviteAllInRoomSuccess', '방의 모든 참가자에게 초대 메시지를 전송했습니다.');
+});
+
+// kickUserFromRoom 이벤트 핸들러
+socket.on('kickUserFromRoom', function (data) {
+var { roomId, targetUserId } = data;
+
+// 방이 존재하는지 확인
+var room = rooms[roomId];
+if (!room) {
+  // 방이 존재하지 않을 경우 처리
+  socket.emit('kickUserFromRoomError', '강퇴하려는 방이 존재하지 않습니다.');
+  return;
 }
+
+// 강퇴 대상 사용자가 방에 있는지 확인
+var index = room.participants.indexOf(targetUserId);
+if (index === -1) {
+  // 강퇴 대상 사용자가 방에 없을 경우 처리
+  socket.emit('kickUserFromRoomError', '강퇴하려는 사용자가 방에 존재하지 않습니다.');
+  return;
+}
+
+// 강퇴 대상 사용자를 방에서 제거
+room.participants.splice(index, 1);
+
+// 방에서 강퇴 대상 사용자에게 강퇴 메시지 전송
+socket.sockets.to(targetUserId).emit('kickedFromRoom', {
+  roomId: roomId,
+});
+
+// 강퇴 성공 메시지 전송
+socket.emit('kickUserFromRoomSuccess', '사용자를 성공적으로 강퇴했습니다.');
+});
+
+
 //ROOM 버튼--------------------------------
 
 // function toggleRoomInsert() {
